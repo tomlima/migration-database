@@ -1,22 +1,22 @@
 const migrationModel = require('../models/migration')
+const { performance } = require('perf_hooks')
 
 module.exports = {
   migrate: async (req, res) => {
+    var t0 = performance.now()
     try {
-      const t1 = performance.now()
       const entities = await migrationModel.getDataFromMssql(req.body)
       const convertedEntities = await migrationModel.getNewDataStructure(
         entities,
         req.body
       )
       await migrationModel.insertDataIntoMysql(convertedEntities, req.body)
-      const t2 = performance.now()
-
+      var t1 = performance.now()
       return res.status(200).json({
         success: 1,
         data: {
           message: 'Done..',
-          'Execution time': Math.trunc(t2 - t1) + ' milliseconds.'
+          time: `Execution time: ${t1 - t0} ms`
         }
       })
     } catch (err) {

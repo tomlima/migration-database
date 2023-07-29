@@ -1,4 +1,3 @@
-const { columns } = require('mssql')
 const mssql = require('../services/mssql')
 const mysql = require('../services/mysql')
 
@@ -63,10 +62,15 @@ const saveData = (data, queryString) => {
   return new Promise((resolve, reject) => {
     queryString += '('
     data.forEach((item, index, array) => {
+      if (item.columnType == 'datetime') {
+        const newDate = item.content.toISOString()
+        console.log(newDate)
+        item.content = item.content.toISOString()
+      }
       if (item.columnType == 'int') {
         queryString += item.content + ','
       } else {
-        queryString += "'" + item.content + "'" + ','
+        queryString += '"' + item.content + '"' + ','
       }
       /*---------------------------------------
          Check if is the last item in this loop
