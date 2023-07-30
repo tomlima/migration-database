@@ -1,0 +1,18 @@
+{
+  "sqlServerTableName": "Tags WHERE Idf_Tag_Mae IS NULL",
+  "mysqlServerTableName": "categories",
+  "columns": [
+    {
+      "Idf_Tag": "id",
+      "ColumnType": "int"
+    },
+    {
+      "Des_Tag": "name",
+      "ColumnType": "string"
+    },
+    {
+      "Des_Tag_Acento": "slug",
+      "ColumnType": "string"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "sqlServerTableName": "Usuario",
+  "mysqlServerTableName": "authors",
+  "columns": [
+    {
+      "codUsuario": "id",
+      "ColumnType": "int"
+    },
+    {
+      "nome": "name",
+      "ColumnType": "string"
+    },
+    {
+      "email": "email",
+      "ColumnType": "string"
+    },
+    {
+      "dtCadastro": "created_at",
+      "ColumnType": "datetime"
+    }
+  ]
+}

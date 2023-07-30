@@ -1,0 +1,30 @@
+{
+  "sqlServerTableName": "Materias",
+  "mysqlServerTableName": "posts",
+  "columns": [
+    {
+      "CodMateria": "id",
+      "ColumnType": "int"
+    },
+    {
+      "save_as": "slug",
+      "ColumnType": "string"
+    },
+    {
+      "Titulo": "title",
+      "ColumnType": "string"
+    },
+    {
+      "Materia": "content",
+      "ColumnType": "string"
+    },
+    {
+      "possuiLinkAfiliacao": "is_affiliation",
+      "ColumnType": "int"
+    },
+    {
+      "Data": "created_at",
+      "ColumnType": "datetime"
+    }
+  ]
+}
