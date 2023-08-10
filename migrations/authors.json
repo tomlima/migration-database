@@ -1,9 +1,9 @@
 {
-  "sqlServerTableName": "Usuario",
+  "sqlServerTableName": "team_users",
   "mysqlServerTableName": "authors",
   "columns": [
     {
-      "codUsuario": "id",
+      "coduser": "id",
       "ColumnType": "int"
     },
     {
@@ -11,11 +11,15 @@
       "ColumnType": "string"
     },
     {
+      "bio": "bio",
+      "ColumnType": "string"
+    },
+    {
       "email": "email",
       "ColumnType": "string"
     },
     {
-      "dtCadastro": "created_at",
+      "dataCriacao": "created_at",
       "ColumnType": "datetime"
     }
   ]

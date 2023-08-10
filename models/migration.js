@@ -1,13 +1,15 @@
 const mssql = require('../services/mssql')
 const mysql = require('../services/mysql')
+const utils = require('../services/utils')
 
 module.exports = {
-  getDataFromMssql: requestBody => {
-    return new Promise((resolve, reject) => {
+  getDataFromMssql: async requestBody => {
+    const columns = await createMssqlColumnsToSelect(requestBody.columns)
+    return new Promise(async (resolve, reject) => {
       mssql.connect(async err => {
         if (err) reject('Cant connect to mssql database')
         await mssql.query(
-          `SELECT TOP 30 * FROM ${requestBody.sqlServerTableName}`,
+          `SELECT TOP 1000 ${columns} FROM ${requestBody.sqlServerTableName}`,
           (err, results) => {
             if (err) reject(err)
             resolve(results.recordsets[0])
@@ -19,104 +21,139 @@ module.exports = {
   getNewDataStructure: (items, requestBody) => {
     var newItemList = []
     return new Promise((resolve, reject) => {
-      items.forEach(async (item, index, array) => {
-        const newItem = await createNewEntityStructure(item, requestBody)
-        newItemList.push(newItem)
+      try {
+        items.forEach(async (item, index, array) => {
+          const newItem = await createNewEntityStructure(item, requestBody)
+          newItemList.push(newItem)
 
-        /*---------------------------------------
-         Check if is the last item in this loop
-        -----------------------------------------*/
-        if (Object.is(array.length - 1, index)) {
-          resolve(newItemList)
-        }
-      })
+          /*---------------------------------------
+           Check if is the last item in this loop
+          -----------------------------------------*/
+          if (Object.is(array.length - 1, index)) {
+            resolve(newItemList)
+          }
+        })
+      } catch (err) {
+        reject(err)
+      }
     })
   },
   insertDataIntoMysql: (data, requestBody) => {
     return new Promise(async (resolve, reject) => {
-      const mysqlTableName = requestBody.mysqlServerTableName
-      var columns = requestBody.columns
-      const columnNames = await createColumnNamesStringToInsert(columns)
-      let insertString = `INSERT INTO ${mysqlTableName} ${columnNames} VALUES `
-      const valuesNames = await insertData(data, insertString)
-      resolve(valuesNames)
+      try {
+        const mysqlTableName = requestBody.mysqlServerTableName
+        var columns = requestBody.columns
+        const columnNames = await createColumnNamesStringToInsert(columns)
+        let insertString = `INSERT INTO ${mysqlTableName} ${columnNames} VALUES `
+        await insertData(data, insertString)
+        resolve()
+      } catch (err) {
+        reject(err)
+      }
     })
   }
 }
 
 const insertData = (data, insertString) => {
   return new Promise((resolve, reject) => {
-    data.forEach(async (item, index, array) => {
-      const result = await saveData(item, insertString)
-      /*---------------------------------------
-         Check if is the last item in this loop
-        -----------------------------------------*/
-      if (Object.is(array.length - 1, index)) {
-        resolve(result)
-      }
-    })
+    try {
+      data.forEach(async (item, index, array) => {
+        await saveData(item, insertString)
+        /*---------------------------------------
+           Check if is the last item in this loop
+          -----------------------------------------*/
+        if (Object.is(array.length - 1, index)) {
+          resolve()
+        }
+      })
+    } catch (err) {
+      reject(err)
+    }
   })
 }
 
 const saveData = (data, queryString) => {
   return new Promise((resolve, reject) => {
-    queryString += '('
-    data.forEach((item, index, array) => {
-      if (item.columnType == 'datetime') {
-        const newDate = item.content.toISOString()
-        console.log(newDate)
-        item.content = item.content.toISOString()
-      }
-      if (item.columnType == 'int') {
-        queryString += item.content + ','
-      } else {
-        queryString += '"' + item.content + '"' + ','
-      }
-      /*---------------------------------------
-         Check if is the last item in this loop
-        -----------------------------------------*/
-      if (Object.is(array.length - 1, index)) {
-        queryString = queryString.slice(0, -1)
-        queryString += ')'
-        mysql.query(queryString, (err, results) => {
-          if (err) {
-            reject(err)
-          }
-          resolve(results)
-        })
-      }
-    })
+    try {
+      queryString += '('
+      data.forEach(async (item, index, array) => {
+        // Handle string type
+        if (item.columnType == 'string') {
+          item.content = utils.scapeSingleQuotes(item.content)
+        }
+        // Handle datatime type
+        if (item.columnType == 'datetime') {
+          item.content = item.content.toISOString()
+        }
+        // Handle int type
+        if (item.columnType == 'int') {
+          queryString += item.content + ','
+        } else if (
+          item.columnType == 'string' ||
+          item.columnType == 'datetime'
+        ) {
+          queryString += "'" + item.content + "'" + ','
+        }
+
+        /*---------------------------------------
+           Check if is the last item in this loop
+          ----------------------------------------- */
+        if (Object.is(array.length - 1, index)) {
+          queryString = queryString.slice(0, -1)
+          queryString += ')'
+          mysql.query(queryString, (err, results) => {
+            if (err) {
+              reject(err)
+            }
+            resolve(results)
+          })
+        }
+      })
+    } catch (err) {
+      reject(err)
+    }
   })
 }
 
 const createColumnNamesStringToInsert = columns => {
   return new Promise((resolve, reject) => {
-    let valuesString = '('
-    columns.forEach((column, index, array) => {
-      valuesString += Object.values(column)[0] + ','
-      /*---------------------------------------
-         Check if is the last item in this loop
-        -----------------------------------------*/
-      if (Object.is(array.length - 1, index)) {
-        valuesString = valuesString.slice(0, -1)
-        valuesString += ')'
-        resolve(valuesString)
-      }
-    })
+    try {
+      let valuesString = '('
+      columns.forEach((column, index, array) => {
+        if (column.ColumnType !== 'image' && column.ColumnType !== 'seo') {
+          valuesString += Object.values(column)[0] + ','
+        }
+        /*---------------------------------------
+           Check if is the last item in this loop
+          -----------------------------------------*/
+        if (Object.is(array.length - 1, index)) {
+          valuesString = valuesString.slice(0, -1)
+          valuesString += ')'
+          resolve(valuesString)
+        }
+      })
+    } catch (err) {
+      reject(err)
+    }
   })
 }
 
 const createNewEntityStructure = (entity, requestBody) => {
   var columns = requestBody.columns
   const resultArray = []
-
   return new Promise((resolve, reject) => {
     try {
       columns.forEach((column, index, array) => {
         const columnName = Object.keys(column)[0]
         const columnValue = Object.values(column)[0]
-        const columnContent = entity[columnName]
+        let columnContent = entity[columnName]
         const columnType = Object.values(column)[1]
+
+        // Handle with slug
+        if (columnName == 'save_as') {
+          columnContent = /[^/]*$/.exec(columnContent)[0]
+        }
+
         resultArray.push({
           column: columnValue,
           content: columnContent,
@@ -127,6 +164,26 @@ const createNewEntityStructure = (entity, requestBody) => {
         -----------------------------------------*/
         if (Object.is(array.length - 1, index)) {
           resolve(resultArray)
+        }
+      })
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
+
+const createMssqlColumnsToSelect = columns => {
+  return new Promise((resolve, reject) => {
+    let valuesString = ''
+    try {
+      columns.forEach((column, index, array) => {
+        valuesString += Object.keys(column)[0] + ','
+        /*---------------------------------------
+           Check if is the last item in this loop
+          -----------------------------------------*/
+        if (Object.is(array.length - 1, index)) {
+          valuesString = valuesString.slice(0, -1)
+          resolve(valuesString)
         }
       })
     } catch (err) {

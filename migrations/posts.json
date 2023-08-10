@@ -1,10 +1,14 @@
 {
-  "sqlServerTableName": "Materias",
+  "sqlServerTableName": "Materias ORDER BY [CodMateria] DESC",
   "mysqlServerTableName": "posts",
   "columns": [
     {
       "CodMateria": "id",
       "ColumnType": "int"
+    },
+    {
+      "publieditorial": "is_sponsored_content",
+      "ColumnType" : "int"
     },
     {
       "save_as": "slug",
@@ -21,6 +25,10 @@
     {
       "possuiLinkAfiliacao": "is_affiliation",
       "ColumnType": "int"
+    },
+    {
+      "chamada": "call_text",
+      "ColumnType" : "string"
     },
     {
       "Data": "created_at",

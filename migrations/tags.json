@@ -1,6 +1,6 @@
 {
   "sqlServerTableName": "Tags WHERE Idf_Tag_Mae IS NOT NULL",
-  "mysqlServerTableName": "categories",
+  "mysqlServerTableName": "tags",
   "columns": [
     {
       "Idf_Tag": "id",

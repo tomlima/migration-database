@@ -16,7 +16,7 @@ module.exports = {
         success: 1,
         data: {
           message: 'Done..',
-          time: `Execution time: ${t1 - t0} ms`
+          time: `Execution time: ${((t1 - t0) / 1000).toFixed(2)} sec`
         }
       })
     } catch (err) {
