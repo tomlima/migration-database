@@ -1,5 +1,5 @@
 {
-  "sqlServerTableName": "Materias ORDER BY [CodMateria] DESC",
+  "sqlServerTableName": "[Materias] WHERE [CodTipoMateria] != 4 AND [CodTipoMateria] != 45 ORDER BY [CodMateria] DESC OFFSET 0 ROWS FETCH NEXT 50000 ROWS ONLY",
   "mysqlServerTableName": "posts",
   "columns": [
     {
@@ -19,7 +19,8 @@
       "ColumnType": "string"
     },
     {
-      "Materia": "content",
+	"Materia": "content",
+	
       "ColumnType": "string"
     },
     {

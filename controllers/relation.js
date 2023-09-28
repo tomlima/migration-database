@@ -5,15 +5,22 @@ module.exports = {
   relationPostAuthor: async (req, res) => {
     var t0 = performance.now()
     try {
-      const posts = await relationModel.getPosts()
       // const tags = await relationModel.getTags()
-      //await relationModel.relationPostAuthor(posts)
-      //wait relationModel.relationPostCategory(posts)
-      //await relationModel.relationPostSeo(posts)
-      await relationModel.relationPostThumb(posts)
-      await relationModel.relationPostBanner(posts)
-      // Change this method
-      //await relationModel.relationPostTag(tags)
+      const posts = await relationModel.getPosts()
+      const reviews = await relationModel.getReviews()
+
+      await relationModel.relationPostCategory(posts, 'post')
+      await relationModel.relationPostSeo(posts, 'post')
+      await relationModel.relationPostThumb(posts, 'post')
+      await relationModel.relationPostBanner(posts, 'post')
+      await relationModel.relationPostAuthor(posts, 'post')
+
+      await relationModel.relationPostCategory(reviews, 'review')
+      await relationModel.relationPostSeo(reviews, 'review')
+      await relationModel.relationPostThumb(reviews, 'review')
+      await relationModel.relationPostBanner(reviews, 'review')
+      await relationModel.relationPostAuthor(reviews, 'review')
+
       var t1 = performance.now()
       return res.status(200).json({
         success: 1,

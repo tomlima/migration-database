@@ -14,3 +14,6 @@ app.use('/api/relation', relationRouter)
 app.listen(3000, () => {
   console.log('Server up at port 3000​')
 })
+
+
+

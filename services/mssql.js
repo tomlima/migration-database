@@ -3,7 +3,7 @@ require('dotenv/config')
 
 module.exports = new mssql.ConnectionPool({
   user: process.env.MSSQL_USER,
-  password: process.env.MSSQL_PASSWORD,
+  password: 'HY4#@1nH*&Ahs',
   database: process.env.MSSQL_DATABASE,
   server: process.env.MSSQL_HOST,
   pool: {

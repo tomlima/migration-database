@@ -7,12 +7,16 @@ module.exports = {
     const columns = await createMssqlColumnsToSelect(requestBody.columns)
     return new Promise(async (resolve, reject) => {
       mssql.connect(async err => {
+        console.log(`SELECT ${columns} FROM ${requestBody.sqlServerTableName}`)
         if (err) reject('Cant connect to mssql database')
         await mssql.query(
-          `SELECT TOP 1000 ${columns} FROM ${requestBody.sqlServerTableName}`,
+          `SELECT ${columns} FROM ${requestBody.sqlServerTableName}`,
           (err, results) => {
-            if (err) reject(err)
-            resolve(results.recordsets[0])
+            if (err) {
+              reject(err)
+            } else {
+              resolve(results.recordsets[0])
+            }
           }
         )
       })
@@ -25,7 +29,6 @@ module.exports = {
         items.forEach(async (item, index, array) => {
           const newItem = await createNewEntityStructure(item, requestBody)
           newItemList.push(newItem)
-
           /*---------------------------------------
            Check if is the last item in this loop
           -----------------------------------------*/
