@@ -52,7 +52,7 @@ module.exports = {
 				`INSERT INTO posts_category_links
                                    (post_id,category_id)
                                  VALUES 
-                                   (${post.CodMateria}, ${post.codTag})`
+                                   (${post.CodMateria}, ${post.CodTag})`
 			} else {
 			    queryString =
 				`INSERT INTO reviews_category_links
