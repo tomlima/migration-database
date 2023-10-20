@@ -58,7 +58,7 @@ module.exports = {
 				`INSERT INTO reviews_category_links
                                    (review_id,category_id) 
                                  VALUES 
-                                   (${post.CodMateria}, ${post.codTag})`
+                                   (${post.CodMateria}, ${post.CodTag})`
 			}
 			await saveData(queryString)
 		    }
