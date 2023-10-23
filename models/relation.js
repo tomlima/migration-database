@@ -9,6 +9,10 @@ module.exports = {
     relationPostAuthor: (posts, postType) => {
 	return new Promise(async (resolve, reject) => {
 	    try {
+		
+		let count = 0;
+		let errorCount = 0;
+		
 		posts.forEach(async (post, index, array) => {
 		    if (post.CodMateria !== null && post.CodAutor !== null) {
 			if (postType == 'post') {
@@ -24,13 +28,23 @@ module.exports = {
                                  VALUE
                                    (${post.CodMateria}, ${post.CodAutor})`
 			}
-			await saveData(queryString)
+			const result = await saveData(queryString)
+			if(result){
+			    count++
+			}
+
+			if(!result){
+			    errorCount++
+			}
 		    }
 		    /*---------------------------------------f
 		    Check if is the last item in this loop
 		    -----------------------------------------*/
 		    if (Object.is(array.length - 1, index)) {
 			resolve('Done')
+			console.log(`Authors relationship data count: ${count} \n `)
+			console.log(`Authors relationship fails: ${errorCount} \n`)
+			console.log('---------------------------------------------')
 		    }
 		})
 	    } catch (err) {
@@ -39,11 +53,15 @@ module.exports = {
 	})
     },
     /*---------------------------------------
-    Relationshio between posts and categories
+    Relationship between posts and categories
     ----------------------------------------*/
     relationPostCategory: (posts, postType) => {
 	return new Promise(async (resolve, reject) => {
 	    try {
+		
+		let count = 0;
+		let errorCount = 0;
+		
 		posts.forEach(async (post, index, array) => {
 		    if (post.CodTag !== null) {
 			let queryString
@@ -60,13 +78,24 @@ module.exports = {
                                  VALUES 
                                    (${post.CodMateria}, ${post.CodTag})`
 			}
-			await saveData(queryString)
+			const result = await saveData(queryString)
+
+			if(result){
+			    count++
+			}
+
+			if(!result){
+			    errorCount++
+			}
 		    }
 		    /*---------------------------------------
 		      Check if is the last item in this loop
 		      -----------------------------------------*/
 		    if (Object.is(array.length - 1, index)) {
 			resolve('Done')
+			console.log(`Categories relationship data count: ${count} \n `)
+			console.log(`Categories relationship fails: ${errorCount} \n`)
+			console.log('---------------------------------------------')
 		    }
 		})
 	    } catch (err) {
@@ -76,7 +105,7 @@ module.exports = {
     },
 
     /*---------------------------------------
-    Relationshio between posts and tags
+    Relationship between posts and tags
     ----------------------------------------*/
     relationTags: (tags) => {
 	return new Promise(async (resolve, reject) => {
@@ -120,6 +149,7 @@ module.exports = {
 			resolve('Done')
 			console.log(`Tags relationship data count: ${count} \n `)
 			console.log(`Tags relationship fails: ${errorCount} \n`)
+			console.log('---------------------------------------------')
 		    }
 		})
 	    } catch (err) {
@@ -128,11 +158,15 @@ module.exports = {
 	})
     },
     /*-------------------------------------------
-    Relationshio between posts and SEO components
+    Relationship between posts and SEO components
     --------------------------------------------*/
     relationPostSeo: (posts, postType) => {
 	return new Promise(async (resolve, reject) => {
 	    try {
+		
+		let count = 0;
+		let errorCount = 0;
+		
 		posts.forEach(async (post, index, array) => {
 		    // Save component
 		    const metaDescription = utils.scapeSingleQuotes(post.descricaoSEO)
@@ -163,12 +197,23 @@ module.exports = {
                              VALUES 
                                (${post.CodMateria}, ${componentId}, 'seo.seo','Seo')`
 		    }
-		    await saveData(queryStringRelationSeo)
+		    const result = await saveData(queryStringRelationSeo)
+
+		    if(result){
+			count++
+		    }
+
+		    if(!result){
+			errorCount++
+		    }
 		    /*---------------------------------------
 		      Check if is the last item in this loop
 		    -----------------------------------------*/
 		    if (Object.is(array.length - 1, index)) {
 			resolve('Done')
+			console.log(`SEO relationship data count: ${count} \n `)
+			console.log(`SEO relationship fails: ${errorCount} \n`)
+			console.log('---------------------------------------------')
 		    }
 		})
 	    } catch (err) {
@@ -182,6 +227,10 @@ module.exports = {
     relationPostThumb: (posts, postType) => {
 	return new Promise(async (resolve, reject) => {
 	    try {
+		
+		let count = 0;
+		let errorCount = 0;
+		
 		posts.forEach(async (post, index, array) => {
 		    // Save file
 		    let thumbUrl = 'https://tm.ibxk.com.br/' + post.pathImagem + '.jpg'
@@ -210,12 +259,23 @@ module.exports = {
                              VALUES 
                                (${fileId}, ${post.CodMateria}, 'api::review.review','thumb')`
 		    }
-		    await saveData(queryStringRelationFile)
+		    const result =  await saveData(queryStringRelationFile
+						   
+	            if(result){
+			count++
+		    }
+
+		    if(!result){
+			errorCount++
+		    }						  
 		    /*---------------------------------------
 		      Check if is the last item in this loop
 		    -----------------------------------------*/
 		    if (Object.is(array.length - 1, index)) {
 			resolve('Done')
+			console.log(`Thumb relationship data count: ${count} \n `)
+			console.log(`Thumb relationship fails: ${errorCount} \n`)
+			console.log('---------------------------------------------')
 		    }
 		})
 	    } catch (err) {
@@ -229,6 +289,10 @@ module.exports = {
     relationPostBanner: (posts, postType) => {
 	return new Promise(async (resolve, reject) => {
 	    try {
+		
+		let count = 0;
+		let errorCount = 0;
+		
 		posts.forEach(async (post, index, array) => {
 		    // Save file
 		    let bannerUrl = 'https://tm.ibxk.com.br' + post.superImagem
@@ -255,12 +319,23 @@ module.exports = {
                              VALUES 
                                (${fileId}, ${post.CodMateria}, 'api::review.review','banner')`
 		    }
-		    await saveData(queryStringRelationFile)
+		    const result = await saveData(queryStringRelationFile)
+		    
+		    if(result){
+			count++
+		    }
+
+		    if(!result){
+			errorCount++
+		    }
 		    /*---------------------------------------
 		      Check if is the last item in this loop
 		     -----------------------------------------*/
 		    if (Object.is(array.length - 1, index)) {
 			resolve('Done')
+			console.log(`Banner relationship data count: ${count} \n `)
+			console.log(`Banner relationship fails: ${errorCount} \n`)
+			console.log('---------------------------------------------')
 		    }
 		})
 	    } catch (err) {
