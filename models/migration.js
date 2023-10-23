@@ -5,11 +5,29 @@ const utils = require('../services/utils')
 module.exports = {
   getDataFromMssql: async requestBody => {
     const columns = await createMssqlColumnsToSelect(requestBody.columns)
+    if(requestBody.mysqlServerTableName == "authors"){
+      return new Promise(async (resolve, reject) => {
+        mssql.authors.connect(async err => {
+          console.log(`SELECT ${columns} FROM ${requestBody.sqlServerTableName}`)
+          if (err) reject('Cant connect to mssql database')
+          await mssql.authors.query(
+            `SELECT ${columns} FROM ${requestBody.sqlServerTableName}`,
+            (err, results) => {
+              if (err) {
+                reject(err)
+              } else {
+                resolve(results.recordsets[0])
+              }
+            }
+          )
+        })
+      })  
+    }
     return new Promise(async (resolve, reject) => {
-      mssql.connect(async err => {
+      mssql.default.connect(async err => {
         console.log(`SELECT ${columns} FROM ${requestBody.sqlServerTableName}`)
         if (err) reject('Cant connect to mssql database')
-        await mssql.query(
+        await mssql.default.query(
           `SELECT ${columns} FROM ${requestBody.sqlServerTableName}`,
           (err, results) => {
             if (err) {

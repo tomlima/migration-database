@@ -90,9 +90,9 @@ module.exports = {
 			let queryString
 			let postType = parseInt(tag.CodTipoMateria)
 			
-			if (postType !== 4 && postType !== 45) {
+			if (postType !== 45) {
 			    queryString =
-				`INSERT INTO posts_tag_links
+				`INSERT INTO posts_tags_links
                                    (post_id,tag_id) 
                                  VALUES 
                                    (${tag.CodMateria}, ${tag.Idf_Tag})`
@@ -273,9 +273,9 @@ module.exports = {
     ----------------------------*/
     getPosts: () => {
 	return new Promise((resolve, reject) => {
-	    mssql.connect(async err => {
+	    mssql.default.connect(async err => {
 		if (err) reject('Cant connect to mssql database')
-		await mssql.query(
+		await mssql.default.query(
 		    `SELECT 
                        [CodMateria],[CodTag],[descricaoSEO],
                        [UrlCanonical],[palavra_chave],[pathImagem],
@@ -302,9 +302,9 @@ module.exports = {
     -----------------------------*/
     getTags: () => {
 	return new Promise((resolve, reject) => {
-	    mssql.connect(async err => {
+	    mssql.default.connect(async err => {
 		if (err) reject('Cant connect to mssql database')
-		await mssql.query(
+		await mssql.default.query(
 		    `SELECT 
                        T0.[Idf_Tag],T1.[CodMateria],T1.[CodTipoMateria]
                      FROM 
@@ -334,9 +334,9 @@ module.exports = {
     --------------------*/
     getReviews: () => {
 	return new Promise((resolve, reject) => {
-	    mssql.connect(async err => {
+	    mssql.default.connect(async err => {
 		if (err) reject('Cant connect to mssql database')
-		await mssql.query(
+		await mssql.default.query(
 		    `SELECT 
                        [CodMateria],[CodTag],[descricaoSEO],
                        [UrlCanonical],[palavra_chave],[pathImagem],
