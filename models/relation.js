@@ -259,11 +259,10 @@ module.exports = {
                              VALUES 
                                (${fileId}, ${post.CodMateria}, 'api::review.review','thumb')`
 		    }
-		    const result =  await saveData(queryStringRelationFile
-						   
+		    const result =  await saveData(queryStringRelationFile)
 	            if(result){
-			count++
-		    }
+					count++
+				}
 
 		    if(!result){
 			errorCount++
