@@ -1,5 +1,5 @@
 {
-  "sqlServerTableName": "[Materias] WHERE [CodTipoMateria] != 4 AND [CodTipoMateria] != 45 ORDER BY [CodMateria] DESC OFFSET 0 ROWS FETCH NEXT 50000 ROWS ONLY",
+  "sqlServerTableName": "[Materias] WHERE [CodTipoMateria] != 45 ORDER BY [CodMateria] DESC",
   "mysqlServerTableName": "posts",
   "columns": [
     {
@@ -8,7 +8,7 @@
     },
     {
       "publieditorial": "is_sponsored_content",
-      "ColumnType" : "int"
+      "ColumnType": "int"
     },
     {
       "save_as": "slug",
@@ -19,8 +19,7 @@
       "ColumnType": "string"
     },
     {
-	"Materia": "content",
-	
+      "Materia": "content",
       "ColumnType": "string"
     },
     {
@@ -29,15 +28,19 @@
     },
     {
       "chamada": "call_text",
-      "ColumnType" : "string"
+      "ColumnType": "string"
     },
     {
       "Data": "created_at",
       "ColumnType": "datetime"
     },
     {
-	"ativo": "active",
-	"ColumnType" : "int"
+      "ativo": "active",
+      "ColumnType": "int"
+    },
+    {
+      "tituloImagemDestaque": "banner_description",
+      "ColumnType": "string"
     }
   ]
 }
