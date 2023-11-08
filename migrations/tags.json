@@ -1,4 +1,5 @@
 {
+  //   "sqlServerTableName": "Tags WHERE Idf_Tag_Mae IS NOT NULL AND Flg_Tipo = 0",
   "sqlServerTableName": "Tags WHERE Idf_Tag_Mae IS NOT NULL",
   "mysqlServerTableName": "tags",
   "columns": [

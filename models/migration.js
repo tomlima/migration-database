@@ -1,3 +1,4 @@
+const { query } = require('mssql')
 const mssql = require('../services/mssql')
 const mysql = require('../services/mysql')
 const utils = require('../services/utils')
@@ -5,7 +6,7 @@ const utils = require('../services/utils')
 module.exports = {
   getDataFromMssql: async requestBody => {
     const columns = await createMssqlColumnsToSelect(requestBody.columns)
-    if(requestBody.mysqlServerTableName == "authors"){
+    if (requestBody.mysqlServerTableName == "authors") {
       return new Promise(async (resolve, reject) => {
         mssql.authors.connect(async err => {
           console.log(`SELECT ${columns} FROM ${requestBody.sqlServerTableName}`)
@@ -21,7 +22,7 @@ module.exports = {
             }
           )
         })
-      })  
+      })
     }
     return new Promise(async (resolve, reject) => {
       mssql.default.connect(async err => {
@@ -174,7 +175,6 @@ const createNewEntityStructure = (entity, requestBody) => {
         if (columnName == 'save_as') {
           columnContent = /[^/]*$/.exec(columnContent)[0]
         }
-
         resultArray.push({
           column: columnValue,
           content: columnContent,
@@ -184,6 +184,7 @@ const createNewEntityStructure = (entity, requestBody) => {
          Check if is the last item in this loop
         -----------------------------------------*/
         if (Object.is(array.length - 1, index)) {
+          console.log(resultArray)
           resolve(resultArray)
         }
       })
